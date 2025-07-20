@@ -2,126 +2,126 @@
   {
     "error": {
       "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
-      "task_name": "scheduled__2025-07-15T03_10_00+00_00",
-      "execution": "task_id=load_contest_winners_operator",
-      "file_name": "attempt=2.log",
-      "error_line": "[2025-07-16T03:15:35.020+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 443392 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
-      "line_number": 1,
-      "error_type": "DATABASE_ERROR",
-      "context_lines": [
-        "[2025-07-16T03:15:35.020+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 443392 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
-        "LINE 2:         from contest_winners",
-        "                     ^"
-      ]
-    },
-    "category": "Database Connection",
-    "severity": "MEDIUM",
-    "suggestion": "**Root Cause:** The 'contest_winners' table does not exist in the PostgreSQL database, causing a failure in the load_contest_winners_operator task.\n\n**Recommended Solution:**\n  - Check the PostgreSQL database schema to ensure the 'contest_winners' table exists and is correctly spelled.\n  - Verify that the table was created with the correct name and structure before running the DAG.\n  - Update the Airflow DAG to use the correct table name or create a new task to recreate the table if necessary.\n\n**Prevention Tips:**\n  - Regularly review database schema changes to ensure tables are up-to-date with the DAG's dependencies.\n  - Use Airflow's built-in support for dynamic table names or parameterized queries to avoid hardcoding table names.\n  - Implement automated testing of database connections and table existence before running DAGs.",
-    "code_fix": null,
-    "documentation_links": null
-  },
-  {
-    "error": {
-      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
-      "task_name": "scheduled__2025-07-15T03_10_00+00_00",
-      "execution": "task_id=load_contest_winners_operator",
-      "file_name": "attempt=2.log",
-      "error_line": "[2025-07-16T03:15:34.971+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
-      "line_number": 1,
-      "error_type": "TASK_FAILURE",
-      "context_lines": [
-        "[2025-07-16T03:15:34.971+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
-        "Traceback (most recent call last):",
-        "  File \"/usr/local/airflow/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py\", line 1910, in _execute_context"
-      ]
-    },
-    "category": "Database Connection",
-    "severity": "HIGH",
-    "suggestion": "**Root Cause:** Failed to establish a connection with Snowflake database due to an unknown error.\n\n**Recommended Solution:**\n  - Check the Snowflake account credentials and ensure they are correct.\n  - Verify that the Airflow connection to Snowflake is properly configured in the Airflow UI or through the `airflow.cfg` file.\n  - Try reconnecting to Snowflake using a different method, such as using the `airflow db` command-line tool.\n\n**Prevention Tips:**\n  - Regularly review and update Airflow connection credentials to prevent stale connections.\n  - Implement retry mechanisms for database connections to handle transient errors.\n  - Monitor Snowflake database performance and adjust connection settings as needed.",
-    "code_fix": null,
-    "documentation_links": null
-  },
-  {
-    "error": {
-      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
-      "task_name": "scheduled__2025-07-15T03_10_00+00_00",
-      "execution": "task_id=load_contest_winners_operator",
-      "file_name": "attempt=1.log",
-      "error_line": "[2025-07-16T03:10:30.150+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 443390 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
-      "line_number": 1,
-      "error_type": "DATABASE_ERROR",
-      "context_lines": [
-        "[2025-07-16T03:10:30.150+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 443390 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
-        "LINE 2:         from contest_winners",
-        "                     ^"
-      ]
-    },
-    "category": "Database Connection",
-    "severity": "MEDIUM",
-    "suggestion": "**Root Cause:** The 'contest_winners' table does not exist in the PostgreSQL database, causing a failure in the load_contest_winners_operator task.\n\n**Recommended Solution:**\n  - Check the PostgreSQL database schema to ensure the 'contest_winners' table exists and is correctly spelled.\n  - Verify that the table has been created or updated since the last DAG run.\n  - Update the Airflow DAG to use the correct table name or create a new table with the same structure.\n\n**Prevention Tips:**\n  - Regularly review and update database schema changes in Airflow DAGs.\n  - Use Airflow's built-in support for dynamic table names or create a separate configuration file for sensitive data.\n  - Implement automated testing of database connections to catch such errors early.",
-    "code_fix": null,
-    "documentation_links": null
-  },
-  {
-    "error": {
-      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
-      "task_name": "scheduled__2025-07-15T03_10_00+00_00",
-      "execution": "task_id=load_contest_winners_operator",
-      "file_name": "attempt=1.log",
-      "error_line": "[2025-07-16T03:10:30.097+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
-      "line_number": 1,
-      "error_type": "TASK_FAILURE",
-      "context_lines": [
-        "[2025-07-16T03:10:30.097+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
-        "Traceback (most recent call last):",
-        "  File \"/usr/local/airflow/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py\", line 1910, in _execute_context"
-      ]
-    },
-    "category": "Database Connection",
-    "severity": "HIGH",
-    "suggestion": "**Root Cause:** Failed to establish a connection with Snowflake database due to an unknown error.\n\n**Recommended Solution:**\n  - Check the Snowflake account credentials and ensure they are correct.\n  - Verify that the Airflow Snowflake operator is properly configured in the DAG.\n  - Review the Airflow logs for more detailed information about the error.\n\n**Prevention Tips:**\n  - Regularly review and update Airflow operator configurations to ensure they remain accurate.\n  - Implement logging mechanisms to track database connection attempts and failures.\n  - Use Airflow's built-in retry functionality to handle transient errors.",
-    "code_fix": null,
-    "documentation_links": null
-  },
-  {
-    "error": {
-      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
-      "task_name": "scheduled__2025-07-15T03_10_00+00_00",
+      "task_name": "scheduled__2025-07-19T03_10_00+00_00",
       "execution": "task_id=load_contest_winners_operator",
       "file_name": "attempt=3.log",
-      "error_line": "[2025-07-16T03:20:40.661+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
+      "error_line": "[2025-07-20T03:20:46.394+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
       "line_number": 1,
       "error_type": "TASK_FAILURE",
       "context_lines": [
-        "[2025-07-16T03:20:40.661+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
+        "[2025-07-20T03:20:46.394+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
         "Traceback (most recent call last):",
         "  File \"/usr/local/airflow/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py\", line 1910, in _execute_context"
       ]
     },
     "category": "Database Connection",
     "severity": "HIGH",
-    "suggestion": "**Root Cause:** Failed to establish a connection with Snowflake database due to incorrect credentials.\n\n**Recommended Solution:**\n  - Verify that the Snowflake account credentials (username, password, and warehouse) are correct and up-to-date in the Airflow settings.\n  - Check if the Snowflake database schema has changed and update the DAG accordingly.\n  - Ensure that the Airflow user has the necessary permissions to access the Snowflake database.\n\n**Prevention Tips:**\n  - Regularly review and update Airflow credentials to prevent stale connections.\n  - Implement a robust testing framework to validate Snowflake connection before running DAGs.\n  - Monitor Airflow logs for any errors related to database connections and address them promptly.",
+    "suggestion": "**Root Cause:** Failed to establish a connection with Snowflake database due to an unknown error.\n\n**Recommended Solution:**\n  - Check the Snowflake account credentials and ensure they are correct.\n  - Verify that the Airflow Snowflake operator is properly configured in the DAG.\n  - Review the Airflow logs for any additional error messages related to the task execution.\n\n**Prevention Tips:**\n  - Regularly review and update Airflow operator configurations to ensure they are accurate and up-to-date.\n  - Implement logging mechanisms to capture and analyze task execution errors.\n  - Use Airflow's built-in monitoring tools to detect potential issues before they become critical.",
     "code_fix": null,
     "documentation_links": null
   },
   {
     "error": {
       "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
-      "task_name": "scheduled__2025-07-15T03_10_00+00_00",
+      "task_name": "scheduled__2025-07-19T03_10_00+00_00",
       "execution": "task_id=load_contest_winners_operator",
-      "file_name": "attempt=3.log",
-      "error_line": "[2025-07-16T03:20:40.705+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 443398 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
+      "file_name": "attempt=2.log",
+      "error_line": "[2025-07-20T03:15:39.395+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 445359 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
       "line_number": 1,
       "error_type": "DATABASE_ERROR",
       "context_lines": [
-        "[2025-07-16T03:20:40.705+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 443398 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
+        "[2025-07-20T03:15:39.395+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 445359 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
         "LINE 2:         from contest_winners",
         "                     ^"
       ]
     },
     "category": "Database Connection",
     "severity": "MEDIUM",
-    "suggestion": "**Root Cause:** The 'contest_winners' table does not exist in the PostgreSQL database, causing a failure in the load_contest_winners_operator task.\n\n**Recommended Solution:**\n  - Check the PostgreSQL database schema to ensure the 'contest_winners' table exists and is correctly spelled.\n  - Verify that the table has been created or updated with the correct structure and data.\n  - Update the DAG's SQL query to match the actual table name and structure.\n\n**Prevention Tips:**\n  - Regularly review database schema changes before updating DAGs.\n  - Use Airflow's built-in support for dynamic table names or use a separate data source to fetch table metadata.\n  - Implement automated testing of DAGs against the PostgreSQL database schema.",
+    "suggestion": "**Root Cause:** The 'contest_winners' table does not exist in the PostgreSQL database, causing a failure in the load_contest_winners_operator task.\n\n**Recommended Solution:**\n  - Check the PostgreSQL database schema to ensure the 'contest_winners' table exists and is correctly spelled.\n  - Verify that the table has been created or updated since the last DAG run.\n  - Update the DAG's SQL query to use the correct table name or create the table if it does not exist.\n\n**Prevention Tips:**\n  - Regularly review and update DAGs to ensure they reflect changes in database schema.\n  - Use Airflow's built-in support for dynamic table names or schema discovery.\n  - Implement automated testing of DAGs against the PostgreSQL database before running them.",
+    "code_fix": null,
+    "documentation_links": null
+  },
+  {
+    "error": {
+      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
+      "task_name": "scheduled__2025-07-19T03_10_00+00_00",
+      "execution": "task_id=load_contest_winners_operator",
+      "file_name": "attempt=1.log",
+      "error_line": "[2025-07-20T03:10:35.187+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
+      "line_number": 1,
+      "error_type": "TASK_FAILURE",
+      "context_lines": [
+        "[2025-07-20T03:10:35.187+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
+        "Traceback (most recent call last):",
+        "  File \"/usr/local/airflow/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py\", line 1910, in _execute_context"
+      ]
+    },
+    "category": "Database Connection",
+    "severity": "HIGH",
+    "suggestion": "**Root Cause:** Failed to establish a connection with Snowflake database due to an unknown error.\n\n**Recommended Solution:**\n  - Check the Snowflake account credentials and ensure they are correct.\n  - Verify that the Airflow Snowflake operator is properly configured in the DAG.\n  - Review the Airflow logs for any additional error messages related to the task execution.\n\n**Prevention Tips:**\n  - Regularly review and update Airflow operator configurations to ensure they are accurate and up-to-date.\n  - Implement logging mechanisms to track Snowflake connection attempts and failures.\n  - Use Airflow's built-in retry mechanism for failed tasks to prevent similar errors from occurring.",
+    "code_fix": null,
+    "documentation_links": null
+  },
+  {
+    "error": {
+      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
+      "task_name": "scheduled__2025-07-19T03_10_00+00_00",
+      "execution": "task_id=load_contest_winners_operator",
+      "file_name": "attempt=1.log",
+      "error_line": "[2025-07-20T03:10:35.228+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 445357 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
+      "line_number": 1,
+      "error_type": "DATABASE_ERROR",
+      "context_lines": [
+        "[2025-07-20T03:10:35.228+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 445357 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
+        "LINE 2:         from contest_winners",
+        "                     ^"
+      ]
+    },
+    "category": "Database Connection",
+    "severity": "MEDIUM",
+    "suggestion": "**Root Cause:** The 'contest_winners' table does not exist in the PostgreSQL database, causing a failure in the load_contest_winners_operator task.\n\n**Recommended Solution:**\n  - Check the PostgreSQL database schema to ensure the 'contest_winners' table exists and is correctly spelled.\n  - Verify that the table was created with the correct name and structure before running the DAG.\n  - Update the Airflow DAG to use the correct table name or create a new task to recreate the table if necessary.\n\n**Prevention Tips:**\n  - Regularly review database schema changes to ensure tables are up-to-date with the DAG's dependencies.\n  - Use Airflow's built-in support for dynamic table names or parameterized SQL queries to avoid hardcoding table names.\n  - Implement automated testing of database connections and table existence before running DAGs.",
+    "code_fix": null,
+    "documentation_links": null
+  },
+  {
+    "error": {
+      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
+      "task_name": "scheduled__2025-07-19T03_10_00+00_00",
+      "execution": "task_id=load_contest_winners_operator",
+      "file_name": "attempt=2.log",
+      "error_line": "[2025-07-20T03:15:39.357+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
+      "line_number": 1,
+      "error_type": "TASK_FAILURE",
+      "context_lines": [
+        "[2025-07-20T03:15:39.357+0000] {{taskinstance.py:1824}} ERROR - Task failed with exception",
+        "Traceback (most recent call last):",
+        "  File \"/usr/local/airflow/.local/lib/python3.10/site-packages/sqlalchemy/engine/base.py\", line 1910, in _execute_context"
+      ]
+    },
+    "category": "Database Connection",
+    "severity": "HIGH",
+    "suggestion": "**Root Cause:** Failed to establish a connection with Snowflake database, likely due to incorrect credentials or network issues.\n\n**Recommended Solution:**\n  - Verify Snowflake database credentials and ensure they match the Airflow DAG settings.\n  - Check network connectivity and firewall rules for any potential restrictions.\n  - Update Airflow DAG settings with correct Snowflake database credentials.\n\n**Prevention Tips:**\n  - Regularly review and update Airflow DAG settings to ensure they match changing database credentials or environment variables.\n  - Implement connection validation before executing tasks that rely on database connections.\n  - Use environment variables or Airflow's built-in features for secure and version-controlled database credentials.",
+    "code_fix": null,
+    "documentation_links": null
+  },
+  {
+    "error": {
+      "dag_name": "Challenge_contest_from_Postgres_to_Snowflake",
+      "task_name": "scheduled__2025-07-19T03_10_00+00_00",
+      "execution": "task_id=load_contest_winners_operator",
+      "file_name": "attempt=3.log",
+      "error_line": "[2025-07-20T03:20:46.440+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 445367 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
+      "line_number": 1,
+      "error_type": "DATABASE_ERROR",
+      "context_lines": [
+        "[2025-07-20T03:20:46.440+0000] {{standard_task_runner.py:104}} ERROR - Failed to execute job 445367 for task load_contest_winners_operator ((psycopg2.errors.UndefinedTable) relation \"contest_winners\" does not exist",
+        "LINE 2:         from contest_winners",
+        "                     ^"
+      ]
+    },
+    "category": "Database Connection",
+    "severity": "MEDIUM",
+    "suggestion": "**Root Cause:** The 'contest_winners' table does not exist in the PostgreSQL database, causing a failure in the load_contest_winners_operator task.\n\n**Recommended Solution:**\n  - Check the PostgreSQL database schema to ensure the 'contest_winners' table exists and is correctly spelled.\n  - Verify that the table has been created or updated before running the DAG.\n  - Update the DAG's SQL query to use the correct table name or create the table if it does not exist.\n\n**Prevention Tips:**\n  - Regularly review and update the DAG's database connections and queries to ensure they match changing schema.\n  - Use Airflow's built-in support for dynamic SQL queries to handle changes in the database schema.\n  - Implement a testing framework to verify that DAGs can successfully execute before running them in production.",
     "code_fix": null,
     "documentation_links": null
   }

@@ -1,10 +1,14 @@
 import streamlit as st
-from analyzers.report_merger_agent import IntelligentReportMerger
+# from analyzers.report_merger_agent import IntelligentReportMerger # RIMOSSO: Non più necessario importare l'agente qui
 from datetime import datetime
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import json # NUOVO: Importato per la gestione dei file JSON
+import json
+from pathlib import Path # NUOVO: Importato per la gestione dei percorsi
+
+# NUOVO: Percorso al file JSON dei dati della dashboard pre-generati
+DASHBOARD_DATA_INPUT_PATH = Path(__file__).resolve().parent / "reports" / "final_dashboard_data.json"
 
 # Page configuration with enhanced styling
 st.set_page_config(
@@ -86,12 +90,35 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-@st.cache_data
+@st.cache_data(show_spinner="Caricamento dati dashboard...") # Aggiunto spinner per un feedback visivo
 def load_data():
-    """Loads and returns the fully analyzed DAG data."""
-    merger = IntelligentReportMerger()
-    data = merger.generate_dashboard_data()
-    return data
+    """
+    Loads and returns the fully analyzed DAG data from a pre-generated JSON file.
+    It no longer re-runs the analysis.
+    """
+    if not DASHBOARD_DATA_INPUT_PATH.exists():
+        st.error(
+            f"❌ Dati della dashboard non trovati! Assicurati di aver eseguito "
+            f"`python -m analyzers.report_merger_agent` per generare il file: "
+            f"`{DASHBOARD_DATA_INPUT_PATH.name}` nella cartella `reports/`."
+        )
+        st.stop() # Ferma l'esecuzione dell'app Streamlit
+        return {} # Non dovrebbe essere raggiunto, ma buona pratica
+
+    try:
+        with open(DASHBOARD_DATA_INPUT_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        st.success(f"Dati della dashboard caricati con successo da {DASHBOARD_DATA_INPUT_PATH.name}!")
+        return data
+    except json.JSONDecodeError as e:
+        st.error(f"❌ Errore nella lettura del file JSON dei dati della dashboard: {e}")
+        st.info("Il file potrebbe essere corrotto. Prova a rigenerare i dati eseguendo `python -m analyzers.report_merger_agent`.")
+        st.stop()
+        return {}
+    except Exception as e:
+        st.error(f"❌ Errore imprevisto durante il caricamento dei dati: {e}")
+        st.stop()
+        return {}
 
 def get_priority_config(priority):
     """Returns emoji, color, and CSS class for priority levels."""
@@ -365,8 +392,10 @@ def display_dag_details(dag_id, dag_content):
                 st.info("No recommendations available.")
     with col2:
         st.subheader("Quick Actions")
-        if st.button("🔄 Refresh Analysis", use_container_width=True):
-            st.cache_data.clear()
+        # Il pulsante "Refresh Analysis" ora dovrebbe ricaricare solo la dashboard, non rieseguire l'analisi AI
+        # per coerenza con il nuovo flusso. L'analisi AI si fa tramite report_merger_agent.py
+        if st.button("🔄 Ricarica Dashboard", use_container_width=True):
+            st.cache_data.clear() # Cancella la cache per forzare il ricaricamento del JSON
             st.rerun()
         if st.button("📊 View Analytics", use_container_width=True):
             st.session_state.view_mode = "analytics"
@@ -541,10 +570,16 @@ def main():
     
     all_dags_data = load_data()
     
+    # La gestione dell'errore per il mancato caricamento dei dati è ora gestita in load_data() con st.stop()
+    # Quindi questa condizione non dovrebbe più essere necessaria qui direttamente dopo la chiamata a load_data().
+    # Tuttavia, se load_data() restituisce un dizionario vuoto a causa di un problema non fatale,
+    # è comunque utile gestire il caso qui.
     if not all_dags_data:
-        st.error("Could not load DAG data. Please check the `reports/` directory for JSON files and try again.")
-        st.stop()
-    
+        # Se load_data() ha chiamato st.stop(), il codice non arriverà qui.
+        # Se invece è stato un errore meno grave e ha ritornato {}, avvisa comunque.
+        st.error("I dati dei DAG non sono disponibili. Per favore, assicurati che il file `final_dashboard_data.json` sia stato generato correttamente.")
+        st.stop() # Aggiunto st.stop() anche qui per sicurezza, se il primo stop non ha funzionato.
+
     search_query, selected_priority, health_threshold = create_sidebar()
     
     priority_map = {"CRITICAL": 4, "HIGH": 3, "MEDIUM": 2, "LOW": 1, "UNKNOWN": 0}
