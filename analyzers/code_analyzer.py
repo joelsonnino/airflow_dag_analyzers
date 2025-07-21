@@ -1,8 +1,6 @@
 # AI DAG Code Auditor
 # Iterates on DAG Files in S3 and uses Llama 3.2 to identify possible problems.
 # Generates both a structured JSON data file and a visual HTML report.
-# From a senior data scientist perspective, this automates quality checks,
-# ensures best practices, and aids in risk assessment for Airflow DAGs.
 
 import os
 import html
