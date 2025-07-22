@@ -3,28 +3,12 @@ import os
 import sys
 from pathlib import Path
 
-# --- Environment Configuration ---
-# !!! IMPORTANT: Modify these values to match your setup !!!
-
-# S3 path where your Airflow DAG Python files are stored (e.g., s3://your-bucket/dags/)
 S3_DAGS_DIR = "s3://buff-analytics-dags/dags/" 
-
-# Prefix for your CloudWatch Log Groups for Airflow tasks (e.g., airflow-prod-, if your log groups are airflow-prod-Task)
 LOG_GROUP_PREFIX = "airflow-" 
-
-# Exact name of the CloudWatch Log Group for error log analysis (e.g., airflow-prod-Task)
 LOG_GROUP_NAME = "airflow-Airflow-14-12-22-Task" 
-
-# URL of your Ollama server (usually doesn't change if Ollama is local)
 OLLAMA_HOST = "http://localhost:11434"
-
-# Llama model to use with Ollama (ensure it's already downloaded with `ollama pull <model_name>`)
 OLLAMA_MODEL = "llama3.2"
-
-# Number of hours to look back for stat_reporter
 STAT_REPORTER_HOURS = 48
-
-# Number of hours to look back for log_analyzer
 LOG_ANALYZER_HOURS = 24
 
 # --- End Configuration ---

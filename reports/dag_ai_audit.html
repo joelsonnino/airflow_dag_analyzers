@@ -15,136 +15,167 @@
     
         <div class='dag risk-MEDIUM'>
             <h2>📄 Buff Play Mobile.py (DAG ID: Buff_Play_from_Postgres_to_Snowflake)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG extracts data from a PostgreSQL database, loads it into Snowflake, and refreshes external tables in Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for connections to PostgreSQL and Snowflake</li><li>Hardcoded connection strings and paths</li><li>Lack of logging or monitoring</li><li>Potential for deadlocks or other concurrency issues</li><li>Use of deprecated `awswrangler` library</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement a retry policy for connections, use environment variables for connection strings and paths, add logging and monitoring, and consider using the latest version of `airflow` and `awswrangler` libraries.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads data from PostgreSQL to Snowflake using Airflow&#x27;s &#x27;buff_play_mobile&#x27; schema. It loads tables in chunks, compresses the Parquet files and refreshes external tables in Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for tasks that fail due to network or connection issues</li><li>Hardcoded paths for S3 connections without environment variables</li><li>Inconsistent logging of task execution status</li><li>Potential SQL injection vulnerability due to use of user input in queries</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries to handle transient failures, using environment variables for hardcoded paths and improving logging for better visibility into task execution.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Challenge Contests.py (DAG ID: Challenge_contest_from_Postgres_to_Snowflake)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> DAG to transfer data from PostgreSQL to Snowflake using Airflow. It loads and refreshes external tables in Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for PythonOperator tasks</li><li>Hardcoded paths for S3 objects</li><li>No validation for connection string</li><li>Potential SQL injection vulnerability in query building</li><li>Lack of logging mechanisms</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries and logging mechanisms to improve robustness. Use dynamic path generation instead of hardcoded paths.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> DAG that connects to a PostgreSQL database, loads data into Snowflake, and refreshes external tables.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry delay for SQLAlchemyError exception in connect_pg function</li><li>Hardcoded connection string in connect_pg function</li><li>Lack of docstrings in functions</li><li>Potential issue with concurrent execution due to lack of concurrency control</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retry delay, add docstrings, and consider adding concurrency control to prevent data conflicts.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Challenges_dictionary.py (DAG ID: Challenge_dictionary_from_Postgres_to_Snowflake)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads data from PostgreSQL to Snowflake, refreshes external tables in Snowflake, and disposes of the PostgreSQL engine.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for connections and operations may lead to transient errors being caught as fatal errors.</li><li>Hardcoded paths and query strings make the code less flexible and maintainable. Consider using environment variables or a configuration file instead.</li><li>Insufficient error handling in some functions (e.g., `load_table`), which could mask critical issues.</li><li>Deprecation of SQLAlchemy&#x27;s connection string parsing functionality with `parse.quote_plus`. Prefer using `sqlalchemy` library&#x27;s built-in support for connection strings.</li><li>Lack of logging or monitoring mechanisms to track the DAG&#x27;s execution and identify potential problems.</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries, use a more flexible configuration system, improve error handling, update deprecated functionality, and add logging/monitoring mechanisms.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG extracts data from a PostgreSQL database and loads it into Snowflake, then refreshes the external tables in Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in the `connect_pg` function</li><li>Hardcoded paths in the `load_table` function</li><li>Lack of error handling in the `refresh_ext_tables` function</li><li>Unnecessary use of `python_callable` with `PythonOperator`</li><li>No docstrings in any of the functions</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the `connect_pg` function, and refactor `load_table` to avoid hardcoded paths. Also consider adding error handling to `refresh_ext_tables`. Finally, add docstrings to all functions.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Complex_google_ads_snowflake_uploader.py (DAG ID: Complex_google_ads_snowflake_uploader_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG uploads Google Ads data to Snowflake using a custom operator.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for tasks (default retry count is not specified)</li><li>Hardcoded path in `init_conf()` function</li><li>Potential data loss due to missing `catchup` value (set to True by default)</li><li>Deprecation notice for `empty` operator in Airflow 2.x</li><li>Lack of docstrings for functions</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries for tasks, updating hardcoded paths, and enabling catchup for all tasks. Add docstrings to improve readability.</div>
-            <pre>Update `retries` parameter in `init_args()` function, update hardcoded path in `init_conf()` function, add `catchup=False` to all task definitions, and add docstrings to functions</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> A DAG that uploads Google Ads data to Snowflake, using a pipeline of tasks with conditional scheduling and retries.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for dependent upstream tasks in gen_ads_chain function</li><li>Hardcoded path in gen_ads_chain function</li><li>Potential issues with inconsistent dates handling (ds_add macro) and date column usage</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retry policy for upstream tasks, avoid hardcoded paths, and ensure consistent dates handling to prevent potential errors.</div>
+            
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 EFtestDag.py (DAG ID: test_recover_everflow)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG retrieves data from a PostgreSQL database and then fires events to an external endpoint based on the retrieved data. The data is used to update a table with gaming points, matches, and other relevant information.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in the `fireEvents` task</li><li>Hardcoded paths and URLs</li><li>Lack of logging and error handling</li><li>Use of deprecated `airflow.providers.snowflake.hooks.snowflake` hook</li><li>No docstrings or comments for functions and tasks</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the `fireEvents` task, use environment variables or a configuration file for hardcoded paths and URLs, add logging and error handling, update the hook to a non-deprecated version, and add docstrings and comments to functions and tasks.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG retrieves data from PostgreSQL, processes it, and then triggers events on an external API.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>The retry delay is set to 5 minutes, which might not be sufficient for some connections or operations. Consider increasing the retry delay or using a more robust connection mechanism.</li><li>The `fireEvents` function does not handle potential exceptions that may occur during the execution of the external API requests. This could lead to silent failures and unexpected behavior.</li><li>There are no checks for data type mismatches between the retrieved data and the expected formats in the external API. This might result in errors or unexpected behavior.</li><li>The DAG uses `awswrangler` to interact with an S3 bucket, but there is no error handling in case of failures during this operation.</li><li>Some variables like `baseURL`, `url2`, `url3`, `url4` are hardcoded without any validation. This might lead to issues if these values change or need to be updated.</li><li>The `fireEvents` function uses `try-except` blocks to catch exceptions, but it&#x27;s not clear what specific exceptions will be caught and how they will be handled.</li><li>There is no logging mechanism in place for debugging purposes.</li><li>Some variables like `incentive`, `txn_id` are used without any validation or explanation.</li><li>The `fireEvents` function uses a hardcoded list of transaction IDs (`txns`) instead of retrieving them dynamically from the processed data.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Increase the retry delay to at least 30 minutes for connections that may take longer to establish.
+Implement proper error handling and logging mechanisms in the `fireEvents` function.
+Use type checking or validation to ensure data types are correct before sending requests to the external API.
+Consider using a more robust connection mechanism, such as a connection pool, to handle repeated connections.
+Use environment variables or a configuration file to store hardcoded values like `baseURL`, `url2`, etc. and validate them before use.
+Add specific exception handling for common errors that may occur during API requests.
+Consider using a more robust method for retrieving transaction IDs from the processed data, such as using a database query or a message queue.
+Add logging mechanisms to help with debugging and troubleshooting.
+Consider adding documentation or comments to explain the purpose of variables like `incentive` and how they are used in the code.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Leaderboard Contests.py (DAG ID: Leaderboard_contest_from_Postgres_to_Snowflake)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads leaderboard data from PostgreSQL and Snowflake, then refreshes external tables in Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for connections</li><li>No validation of `cfg[t][2]` value for &#x27;none&#x27; cases</li><li>Potential data loss due to missing `offset` parameter in Snowflake queries</li><li>No error handling for PythonOperator failures</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retry policy for connections, validate `cfg[t][2]` values, add offset parameter and implement proper error handling for PythonOperator failures. Also consider adding docstrings to functions.</div>
-            <pre>add retry policy: `arguments[&#x27;retries&#x27;] = 3` or use `retry_limit` parameter in SnowflakeHook; add validation: `if cfg[t][2] == &#x27;none&#x27;: ... else: ...`; add offset: `limit {chunkSize} OFFSET {offset}`; implement error handling: `try-except block for PythonOperator failures`</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG connects to a PostgreSQL database, loads data into S3 and then refreshes the tables on Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for connection error</li><li>Hardcoded path for loading data into S3</li><li>Lack of docstrings in functions</li><li>Potential security risk from using `parse.quote_plus` to construct the PostgreSQL connection string</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries for connection errors, use environment variables or a secrets manager for sensitive data like database passwords and Snowflake credentials. Consider using Airflow&#x27;s built-in support for Snowflake by using `airflow.providers.snowflake.hooks.snowflake.SnowflakeHook` instead of creating your own hook.</div>
+            <pre>Add retries to the `connect_pg` function, e.g.: `retries=10`, `retry_delay timedelta(minutes=5)`. Update the connection string construction to use environment variables or a secrets manager.</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Melee_events.py (DAG ID: melee_postback_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG sends Google Ads events to Airflow and prints the response.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for failed requests</li><li>Hardcoded access token in clear text</li><li>Missing docstring for the PythonOperator</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries, secure sensitive data, and add a docstring to the `send_events` function.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG sends a POST request to the Google AdWords API to retrieve events data.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for non-200 status codes in `send_events` function.</li><li>Insecure use of hardcoded access token in `headers`. Consider using environment variables or secure storage.</li><li>Potential concurrency issue due to single DAG instance with concurrency set to 1.</li><li>Lack of logging and monitoring mechanisms.</li><li>Missing type hints for the `send_events` function.</li><li>Deprecation notice: `requests` library is not actively maintained.</li><li>Potential security risk: sensitive data (e.g., access token) hardcoded in the code.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement a retry policy for non-200 status codes using `tenacity` library or similar.
+Store sensitive data (access token) securely using environment variables or a secrets manager.
+Increase concurrency to at least 5 using the `concurrent.futures` library or Airflow&#x27;s built-in concurrency features.
+Add logging and monitoring mechanisms to track the DAG&#x27;s performance and any issues that may arise.
+Use type hints for the `send_events` function to improve code readability and maintainability.
+Consider using a more secure alternative to the `requests` library, such as `httpx`, which is actively maintained.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 OW_tables_to_S3.py (DAG ID: upload_OW_tables_to_s3)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> Uploads full tables from PostgreSQL to S3 and refreshes external Snowflake tables.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>missing retries in case of PostgreSQL connection errors or Snowflake query failures</li><li> hardcoded path to S3 bucket, consider using Airflow&#x27;s built-in storage options</li><li>potential data type issues due to missing explicit casting in `wr.s3.to_parquet` method</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries for PostgreSQL connections and Snowflake queries to handle potential failures.</div>
-            
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads data from PostgreSQL and uploads it to S3, then refreshes external tables in Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for PythonOperator &#x27;refresh_external_tables&#x27;</li><li>Hardcoded path in s3.to_parquet() call</li><li>No error handling in load_full_tables function</li><li>Missing docstrings for functions and operators</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the &#x27;refresh_external_tables&#x27; PythonOperator, avoid hardcoded paths by using Airflow&#x27;s built-in S3 hooks, add docstrings to all functions and operators, consider adding error handling in load_full_tables function</div>
+            <pre>add `retries=3` to `default_args` of DAG, use `airflow.providers.s3.hooks.S3Hook` instead of hardcoded path</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Pings_from_Mongo.py (DAG ID: Desktop_Tracking_MongoDB)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports MongoDB data to S3 as Parquet files based on predefined aggregation pipeline.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for tasks with failed exceptions</li><li>Hardcoded paths and folder names</li><li>No error handling or logging in the `export_mongodb_to_s3` function</li><li>Deprecation of `DummyOperator` in favor of `NoneTask`</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for tasks with failed exceptions, use environment variables for paths and folder names, add error handling and logging to the `export_mongodb_to_s3` function, and update `DummyOperator` to `NoneTask`</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports MongoDB data to S3 as Parquet files, performing aggregation on the data.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for failed tasks</li><li>Hardcoded paths and folder names</li><li>Improper scheduling with None schedule_interval</li><li>Deprecated `awswrangler` operator usage (should use `aws_common` instead)</li><li>Lack of docstrings for custom functions and operators</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to failed tasks, use environment variables for hardcoded paths, set a proper schedule_interval, update the `export_mongodb_to_s3` function with `aws_common` operator, and add docstrings for custom functions and operators.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Pings_from_Mongo2.py (DAG ID: Desktop_Tracking_MongoDB_v2)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> Export MongoDB aggregation results to S3 as Parquet files.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in case of failed connections or data processing errors</li><li>Hardcoded path for storing Parquet files on S3 without considering environment variables or cloud provider&#x27;s bucket naming conventions</li><li>Lack of logging and monitoring mechanism for tracking DAG run success/failure, timeouts, and resource utilization</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries with exponential backoff to handle transient errors; use AWS SDK&#x27;s built-in retry mechanism or a third-party library like `tenacity` for better error handling; add logging and monitoring using Airflow&#x27;s built-in logging and `prometheus` integration for cloud providers.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports MongoDB aggregation results to S3 as Parquet files.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>No retries for tasks that fail with a non-zero exit code</li><li>Hardcoded path in `awswrangler.s3.to_parquet` function</li><li>Missing docstrings for functions and operators</li><li>Potential security risk from using `parse.quote_plus` to construct MongoDB connection string</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to tasks that fail with a non-zero exit code, use an environment variable for sensitive data like MongoDB connection strings, and add docstrings to functions and operators.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Pings_from_Mongo3.py (DAG ID: Desktop_Tracking_MongoDB_limit_for_test_v2)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> Exports desktop tracking aggregation results from MongoDB to S3 as Parquet files.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for failed tasks</li><li>Hardcoded MongoDB connection settings</li><li>Inconsistent data cleaning and formatting steps</li><li>Lack of error handling in Python callable &#x27;export_mongodb_to_s3&#x27;</li><li>Uncommented `schedule_interval` to enable task execution</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retry policy with increasing delays for failed tasks
-Use environment variables or config files to store sensitive connection settings
-Consolidate and standardize data cleaning and formatting steps
-Implement error handling in Python callable &#x27;export_mongodb_to_s3&#x27;
-Enable task execution by uncommenting `schedule_interval`</div>
-            
+            <div class='summary'><strong>🧠 Summary:</strong> Exports MongoDB data to S3 as Parquet, with data filtering and aggregation.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for some tasks, which may lead to task failures without feedback.</li><li>Hardcoded path in `wr.s3.to_parquet` function call, which may break if the bucket or folder structure changes.</li><li>No error handling for tasks that fail due to MongoDB connectivity issues or other external factors.</li><li>Potential performance issue due to limited concurrency (1) and no task retry mechanism.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries to tasks with potential failure conditions, and implement more robust error handling. Also, consider increasing concurrency for better performance.</div>
+            <pre>Add `retry_count=10` and `max_retries=5` to the `export_mongodb_to_s3` function call, and handle exceptions properly in the `export_mongodb_to_s3` function.</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 Pings_from_Mongo4.py (DAG ID: Desktop_Tracking_MongoDB_v4)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports MongoDB data to S3 as Parquet files, filtered by date range.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for tasks with failures</li><li>Hardcoded path in `wr.s3.to_parquet` call</li><li>No handling for potential MongoDB connection errors</li><li>Lack of logging or monitoring for DAG execution</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retry policies for task failures, use environment variables for S3 paths, and add logging/monitoring to ensure DAG reliability.</div>
-            <pre>Add `retries` parameter to `PythonOperator` calls and set a default value for `retry_delay`; update `wr.s3.to_parquet` call to use an environment variable for the path; consider adding try-except blocks for potential MongoDB errors</pre>
-        </div>
-        <div class='dag risk-MEDIUM'>
-            <h2>📄 Pings_from_Mongo5.py (DAG ID: Desktop_Tracking_MongoDB_v5)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports MongoDB data to S3 in batches, processing each batch and then storing the results in a Parquet file.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for tasks</li><li>Hardcoded path in s3.to_parquet() function</li><li>Potential out of order documents are not handled properly</li><li>Lack of documentation and comments in the code</li><li>Use of deprecated operator &#x27;DummyOperator&#x27; instead of &#x27;StartOperator&#x27;</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries for tasks, refactor path to be a variable or parameter, handle out of order documents properly, add docstrings and comments to explain the code, and update operators to start with &#x27;StartOperator&#x27;</div>
+            <div class='summary'><strong>🧠 Summary:</strong> Exports MongoDB aggregation results to S3 as Parquet, filtering on ISO date range.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for failed tasks</li><li>Hardcoded path in `wr.s3.to_parquet` function call</li><li>Lack of docstrings for PythonOperator and export_mongodb_to_s3 function</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to task failure, use dynamic path in S3 upload, and add docstrings to functions and operators.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
+            <h2>📄 Pings_from_Mongo5.py (DAG ID: Desktop_Tracking_MongoDB_v5)</h2>
+            <div class='summary'><strong>🧠 Summary:</strong> Exports MongoDB data to S3 in batches, mapping data types and handling errors.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>No retry policy for failed tasks</li><li>Hardcoded path to S3 bucket without environment variables or secure storage</li><li>Potential issues with out-of-order document processing</li><li>Missing docstring for PythonOperator</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to task failures, use environment variables for sensitive data, and consider implementing a more robust handling of out-of-order documents.</div>
+            <pre>add retry delay to `retry_delay` parameter in `default_args`, and add `@apply_defaults` decorator to `export_mongodb_to_s3` function</pre>
+        </div>
+        <div class='dag risk-MEDIUM'>
             <h2>📄 buff_transactions_recovery_dag.py (DAG ID: recover_buff_transactions_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG recovers buff transactions from a PostgreSQL database, transforms the data into a format suitable for Snowflake, and refreshes an external table in Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>No retries in case of failed PythonOperator execution</li><li>Hardcoded path to S3 bucket</li><li>Potential performance issue due to large chunk size (75,000)</li><li>Lack of error handling in Snowflake refresh operation</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for failed PythonOperator execution
-Use environment variables or a secure storage mechanism to store S3 bucket path
-Consider using a more efficient chunk size or parallel processing
-Add try-except block for Snowflake refresh operation and handle potential errors</div>
-            <pre>add retry logic to the recover_buff_transactions function and consider using an environment variable for the S3 bucket path, and use a more efficient chunk size or parallel processing approach.</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> Recover data from PostgreSQL and refresh Snowflake external table.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>No retry mechanism for failed connections to the PostgreSQL database.</li><li>Hardcoded path for storing parquet files in S3, which may need to be updated.</li><li>Inadequate error handling for the SQL queries executed on the PostgreSQL database.</li><li>Insufficient documentation and comments in the Python code.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement a retry mechanism for failed connections to the PostgreSQL database, use environment variables or a configuration file for storing parquet files&#x27; paths, add proper error handling for SQL queries, and consider adding docstrings to explain the purpose of each function.</div>
+            
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 buff_transactions_to_s3_daily_by_chunks_parquet.py (DAG ID: buff_transactions_to_s3_incremental_cp)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads buff transactions data from PostgreSQL to S3, and then refreshes an external table in Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>The `retries` parameter is set to 2, which might not be enough for all possible failures. Consider increasing it or implementing a more robust retry strategy.</li><li>Hardcoded paths are used in the code, which can make it difficult to maintain and update the DAG. Consider using environment variables or a config file instead.</li><li>The `catchup` parameter is set to False, which means that the DAG will only run according to the schedule interval. Consider setting it to True to allow for catch-up runs.</li><li>The `schedule_interval` is set to None, which means that the DAG will not run at all. Consider setting a valid schedule interval or using Airflow&#x27;s built-in scheduling features.</li><li>The `concurrency` parameter is set to 1, which means that only one task can run at a time. Consider increasing it to allow for more concurrent tasks.</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Review the retry strategy and adjust the number of retries as needed. Update hardcoded paths to use environment variables or a config file. Set `catchup` to True and a valid schedule interval to allow for catch-up runs and scheduling.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads buff transactions data from a PostgreSQL database into Parquet format on Amazon S3, then refreshes an external table in Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for the `load_buff_transactions_full` PythonOperator</li><li>Hardcoded connection parameters and sensitive information (e.g., password) are not masked or stored securely</li><li>No error handling is implemented when executing the `awswrangler.to_parquet` function</li><li>No logging or monitoring is enabled to track the DAG&#x27;s execution status and any errors that may occur</li><li>The `schedule_interval` parameter is set to `None`, which means the DAG will not run at all</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for the `load_buff_transactions_full` PythonOperator to handle transient errors and improve overall robustness
+Use Airflow&#x27;s built-in features, such as the `airflow.models.BaseDAG` class&#x27;s `default_args` parameter, to securely store sensitive connection parameters and avoid hardcoding them directly in the DAG code
+Implement error handling when executing the `awswrangler.to_parquet` function to catch and log any errors that may occur during data loading
+Enable logging and monitoring for the DAG by setting up Airflow&#x27;s built-in logging and monitoring features, such as the `airflow.models.BaseDAG` class&#x27;s `log_level` parameter</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 cleanGateway.py (DAG ID: clean_gateway_events_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> DAG that deletes old gateway events from an S3 bucket every day at 8am</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing docstrings for the DAG and its tasks</li><li>Hardcoded path in the `clean_gateway` function</li><li>Potential issue with `retries` set to 2, but no backoff strategy specified</li><li>No logging or monitoring mechanism implemented</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add docstrings to the DAG and its tasks, implement a more robust error handling mechanism, and consider using a more sophisticated backoff strategy for retries.</div>
-            
+            <div class='summary'><strong>🧠 Summary:</strong> Daily DAG to clean gateway events from S3 bucket every morning at 8am.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for PythonOperator &#x27;clean_gateway_events_task&#x27;</li><li>Hardcoded path to S3 bucket and object key without using Airflow&#x27;s built-in helpers</li><li>No error handling or logging mechanism in the PythonOperator</li><li>Using deprecated `awswrangler` library (version &lt; 2.0.0) - consider upgrading</li><li>Missing docstring for the DAG and PythonOperator</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retry policy to PythonOperator, use Airflow&#x27;s built-in helpers for S3 interactions, add error handling and logging mechanism, and upgrade `awswrangler` library.</div>
+            <pre>Update `clean_gateway_events_task` task with retry policy and error handling:
+```python
+from airflow.models import BaseDAG, DAG, TaskInstance
+import logging
+from airflow.utils.dates import days_ago
+import awswrangler as wr
+
+def clean_gateway(**kwargs):
+    # ...
+    try:
+        wr.s3.delete_objects(path) 
+    except Exception as e:
+        logging.error(f&#x27;Error deleting objects: {e}&#x27;)
+    return &#x27;Task successful&#x27;
+
+# In the DAG definition
+clean_gw = PythonOperator(
+    task_id=&#x27;clean_gateway_events_task&#x27;,
+    python_callable=clean_gateway,
+    dag=dag1
+)
+```
+</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 contests_DB_extract.py (DAG ID: contests_db_extraction_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> Extracts data from various databases and refreshes external tables.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for the extract_data function in case of database connection errors.</li><li>Hardcoded paths and table names may make the DAG less flexible and harder to maintain.</li><li>No error handling for the refresh_ext_tables function.</li><li>Using a hardcoded schedule interval (15 4 * * *) which might not be suitable for all environments.</li><li>Lack of docstrings for functions and operators.</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the extract_data function, use parameterized paths and table names, add error handling to refresh_ext_tables, and consider using a more flexible schedule interval or a cron expression.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> Extracts contest data from various databases, including Snowflake and local PostgreSQL.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for tasks that fail due to network connectivity issues or database errors.</li><li>Hardcoded path to S3 bucket in extract_data function.</li><li>Lack of error handling in extract_data function.</li><li>Unclear logging in extract_data function.</li><li>Missing docstrings for functions and operators.</li><li>Unused import statements.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for tasks that fail, use environment variables for hardcoded paths, add error handling and logging to the extract_data function, document all functions and operators, and remove unused import statements.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 delayed_etl_tasks.py (DAG ID: delayed_dwh_etl_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads data from Snowflake into Airflow&#x27;s DWH and truncates the external table.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for PythonOperator tasks</li><li>Hardcoded path in `SnowflakeHook` constructor</li><li>Lack of docstrings for DAG and operators</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to PythonOperator tasks, avoid hardcoded paths by using environment variables or a more flexible connection handler, and add docstrings to the DAG and operators.</div>
-            <pre>import os; ... shk = SnowflakeHook(snowflake_conn_id=os.environ[&#x27;SNOWFLAKE_CONN_ID&#x27;])</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads data from a Snowflake database into a data warehouse (DWH) every day at 8:30 AM, with a 3-retry delay for failed tasks.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry delay for tasks that take longer than the scheduled interval</li><li>Hardcoded path to DWH tables (consider using environment variables or a config file)</li><li>Insufficient concurrency (set to 1, consider increasing for larger datasets)</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retry delay and increase concurrency to handle potential delays and large dataset loads.</div>
+            <pre>Consider adding retry delay using `default_args[&#x27;retry_delay&#x27;] = timedelta(minutes=30)` and increasing concurrency using `concurrency=5` or more.</pre>
         </div>
         <div class='dag risk-UNKNOWN'>
             <h2>📄 dwh_etl.py (DAG ID: dwh_etl1)</h2>
@@ -155,89 +186,86 @@ Add try-except block for Snowflake refresh operation and handle potential errors
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 everflow_postback_dag.py (DAG ID: fire_incentives_to_everflow)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG processes Everflow incentives data, merging old and new data, and triggering events for each incentive.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in the `fireEvents` function</li><li>Hardcoded paths (e.g., `s3://tperson-bucket/tperson-bucket/Everflow_incentives/main.parquet`)</li><li>Deprecated operator: `airflow.providers.snowflake.hooks.snowflake.SnowflakeHook`</li><li>Lack of docstrings for the DAG and its tasks</li><li>Improper scheduling (every 2 hours, but no clear reason)</li><li>No error handling in the `fireEvents` function</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the `fireEvents` function, use absolute paths or environment variables for hardcoded paths, update the DAG to use a more modern and robust Snowflake hook, add docstrings to the DAG and its tasks, review the scheduling interval and consider using a more flexible approach, and improve error handling in the `fireEvents` function</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG fetches data from a PostgreSQL database, processes it, and sends HTTP requests to an external endpoint based on the processed data. It appears to be intended for sending incentives to users in Everflow.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry mechanism: The task &#x27;fire_events&#x27; is set to retry only once if an exception occurs.</li><li>Hardcoded paths: The DAG uses hardcoded paths to S3 buckets, which might not be suitable for all environments.</li><li>Lack of docstrings: There are no docstrings provided for any of the functions within the DAG, making it difficult to understand their purpose and behavior.</li><li>Potential SQL injection vulnerability: The &#x27;getData&#x27; function constructs a query using string concatenation, which can lead to SQL injection attacks if not handled properly.</li><li>Inconsistent data types: Some columns in the table have different data types (e.g., &#x27;matches&#x27; is an integer, while &#x27;new_matches&#x27; and &#x27;gamingPts&#x27; are floats).</li><li>Potential concurrency issue: The DAG uses a concurrency of 1, which might lead to performance issues if multiple instances of the task are run concurrently.</li><li>Lack of logging: There are no logs or monitoring mechanisms in place to track the progress or errors of the tasks within the DAG.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement a retry mechanism for tasks with retries set to 1 or lower.
+Replace hardcoded paths with environment variables or configurable values.
+Add docstrings to functions within the DAG to improve readability and maintainability.
+Use parameterized queries or prepared statements to prevent SQL injection attacks.
+Ensure consistent data types across columns in the table.
+Consider increasing concurrency or using a more efficient scheduling strategy.
+Introduce logging mechanisms to track task progress and errors.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 export_MongoDB_to_s3.py (DAG ID: MongoDB_export_to_s3)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports data from MongoDB to S3 using the `awswrangler` library.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for the `export_mongodb_to_s3` task</li><li>Hardcoded connection string and password for the MongoDB connection</li><li>Potential issue with concurrency control, as only one task can run at a time</li><li>No error handling or logging mechanisms in place</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retry policy, secure connection string and password, use Airflow&#x27;s built-in concurrency control, and add error handling and logging mechanisms.</div>
-            
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG exports data from MongoDB to S3 using Airflow&#x27;s PythonOperator. It fetches data, cleans and preprocesses it, then stores it in Parquet format on Amazon S3.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for the entire DAG (default retries per task: 1)</li><li>Hardcoded path for storing Parquet files in S3</li><li>Lack of validation for MongoDB connection settings</li><li>No error handling for tasks or PythonOperator failures</li><li>Deprecated `airflow.providers.snowflake.hooks.snowflake` import</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for the entire DAG, use a more secure way to store Parquet files in S3, validate MongoDB connection settings, add error handling for tasks and PythonOperator failures, update deprecated imports.</div>
+            <pre>```python
+from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook  # Update deprecated import
+```</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 google_ads_upload_data.py (DAG ID: google_ads_upload_data_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG uploads data from Snowflake to Google Ads using Airflow. It retrieves data from various Snowflake tables and stores it in S3 CSV files.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for `wr.s3.to_csv` operation</li><li>Hardcoded path in `wr.s3.to_csv` operation</li><li>Lack of error handling for `cur.execute` query execution</li><li>Potential issue with `cur.rowcount == 0:` check</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retries to the `wr.s3.to_csv` operation and proper error handling for query execution. Also, consider using a more dynamic path generation.</div>
-            <pre>Add retry mechanism for `wr.s3.to_csv` like so: `for attempt in range(3): try: wr.s3.to_csv(df=table, path=path); break except Exception as e: ...`</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG uploads data from Snowflake to Google Ads using Airflow&#x27;s PythonOperator.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for failed connections</li><li>Hardcoded paths and query strings may cause issues with environment changes or data format shifts</li><li>No error handling in the event of database errors or other unexpected issues</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider implementing a more robust retry policy, using parameterized paths and query strings, and adding basic error handling to make the DAG more resilient.</div>
+            <pre>Add retry attempts with exponential backoff for failed connections, and use Airflow&#x27;s built-in `airflow.utils.dates.get_next_run_date` to handle date-based scheduling.</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 googlesheet_reader.py (DAG ID: Googlesheets_snowflake_uploader_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG is used to upload data from Google Sheets to Snowflake, leveraging a custom operator. It uses Airflow&#x27;s Variable feature for configuration and has retry capabilities.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy: The &#x27;retries&#x27; argument in the default_args dictionary does not specify a maximum number of retries if the task fails.</li><li>Hardcoded path: The `google_conn_id`, `snowflake_conn_id`, and other connection IDs are hardcoded. It&#x27;s better to store them as variables or environment variables.</li><li>Deprecated operator usage: Although the custom operator is used, it&#x27;s recommended to use Airflow&#x27;s built-in operators (e.g., `GoogleSheetsToSnowflakeOperator` should be renamed) for compatibility.</li><li>Improper scheduling: The schedule_interval is set to None, which might not be what the author intended. Consider using a specific cron expression or a callback function to trigger the DAG.</li><li>Lack of error handling: There&#x27;s no explicit try-except block to handle potential exceptions during task execution.</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider implementing retries with exponential backoff, defining environment variables for connection IDs, and refactoring the custom operator usage. Additionally, add a try-except block around the `gen_pipeline_tasks` function call to handle potential exceptions.</div>
-            
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG imports data from Google Sheets to Snowflake using a custom operator.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>missing retries for tasks that fail</li><li>hardcoded path in the `google_conn_id` variable</li><li>improper scheduling due to missing schedule interval</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for failed tasks, remove hardcoded path from `google_conn_id`, and add a schedule interval.</div>
+            <pre>add retries: &#x27;retries&#x27;: 2, &#x27;retry_delay&#x27;: timedelta(minutes=5),</pre>
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 inc_tables_recovery_dag.py (DAG ID: recover_inc_table_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG recovers data from various tables in different databases and refreshes external tables in Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry logic for database connections</li><li>Hardcoded port number in the connection string</li><li>Potential performance issue due to excessive loop iterations (3000)</li><li>No error handling for exceptions during table creation</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retry logic, validate connection strings, optimize loop iterations, and add error handling.</div>
-            <pre>Add retry logic using `airflow.providers.postgres.hooks.PostgresHook` instead of hardcoded port number and adjust the while loop condition to avoid excessive iterations.</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG recovers data from a PostgreSQL database, processes it using pandas and parquet libraries, and refreshes an external table in Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in case of database connection errors</li><li>Hardcoded paths to S3 buckets and Snowflake tables</li><li>Insufficient concurrency control</li><li>Lack of error handling for PythonOperator tasks</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retry mechanism with exponential backoff, use dynamic path generation for connections and files, increase concurrency limit to handle parallel processing, and add try-except blocks around PythonOperator tasks.</div>
+            
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 payment_service_test.py (DAG ID: payment_service_connection_test_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> DAG tests a PostgreSQL connection and runs a SQL query to read from a &#x27;products&#x27; table.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for the task if it fails</li><li>Hardcoded path in the `connection_string` variable</li><li>Lack of logging and error handling mechanisms</li><li>No validation for empty or invalid connection parameters</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding more retries, validating connection parameters, and using logging to track errors.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG tests a PostgreSQL connection and retrieves data from the &#x27;products&#x27; table.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>No retries are defined for the task, which may cause it to fail if the database is down.</li><li>The DAG schedule interval is set to None, which means it will not run at all.</li><li>The `default_args` dictionary contains hardcoded values that should be avoided.</li><li>The PythonOperator is missing a docstring, making it difficult for users to understand its purpose.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the task and define a schedule interval. Consider using environment variables instead of hardcoding values in `default_args`. Add a docstring to the PythonOperator.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 postgres_dbs_extraction.py (DAG ID: postgres_dbs_extraction_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG extracts data from various PostgreSQL databases, processes it, and stores the results in S3.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for some tasks</li><li>Hardcoded connection strings and database schema names</li><li>Lack of error handling in the extract_data function</li><li>Using deprecated `airflow.operators.python_operator` instead of `airflow.operators.python`</li><li>Insufficient logging</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Improve retry policy, refactor connection strings and database schema names, add error handling, switch to deprecated operator, and enhance logging.</div>
+            <div class='summary'><strong>🧠 Summary:</strong> Extracts data from Postgres databases, loads it into Parquet files and refreshes external Snowflake tables.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>The &#x27;retries&#x27; parameter in the default_args is set to 3, but there is no retry mechanism implemented for tasks that may fail. Adding retries can improve task reliability.</li><li>The &#x27;concurrency&#x27; parameter is set to 1, which might lead to performance issues if multiple tasks are executed concurrently. Consider increasing concurrency or using a more efficient scheduling strategy.</li><li>Some database connections have hardcoded passwords and host information. Storing sensitive data as environment variables or secrets manager can improve security.</li><li>The code does not handle exceptions properly in the extract_data function. Adding proper error handling and logging can enhance debugging and reliability.</li><li>The &#x27;schedule_interval&#x27; is set to &#x27;25 4 * * *&#x27;, which might be too frequent for some databases. Consider setting a more reasonable interval based on database performance and requirements.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries, consider increasing concurrency, store sensitive data securely, improve error handling, and adjust the schedule interval as needed.</div>
             
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 session_service.py (DAG ID: Account_Session_from_Postgres_to_Snowflake)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG extracts data from Postgres, processes it and loads the data to Snowflake.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in the connection to Postgres</li><li>No validation of database schema changes</li><li>Hardcoded path for loading data to S3</li><li>Lack of error handling in the refresh_ext_tables function</li><li>Potential performance issue due to concurrent execution</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to the connection to Postgres, validate database schema changes and handle potential errors in the refresh_ext_tables function. Consider using a more robust method for handling concurrent execution.</div>
-            <pre>```.python
-# add retries to connection
-try:
-    engine.connect()
-except SQLAlchemyError as err:
-    print(&#x27;connection error&#x27;)
-    print(&#x27;error&#x27;, err.__cause__)
-    # retry after 5 minutes
-    time.sleep(300)
-    engine.connect()
-```
-```</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG fetches data from a PostgreSQL database and loads it into Snowflake. It then schedules the same process to repeat every 2 hours, with a retry limit of 2 attempts.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries in the `load_table_operator` task</li><li>Hardcoded paths and connections in the `connect_pg`, `refresh_ext_tables`, and `load_table` functions</li><li>Lack of error handling in the `load_table` function</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retries for tasks with potential errors, secure connections using environment variables or secrets managers, and add try-except blocks to handle exceptions in critical code paths.</div>
+            
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 uar.py (DAG ID: uar)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG processes UAR data by loading tables from a Snowflake database and enriching them with additional information.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retry policy for tasks that may fail during execution (only retries are configured for the entire DAG)</li><li>Hardcoded paths in `view_to_table_full` function</li><li>Lack of error handling in `view_to_table_full` function</li><li>Deprecation notice for `imod` from `operator` module</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Consider adding retry policies to individual tasks, handling potential errors in the `view_to_table_full` function, and updating the `imod` operator to its latest version.</div>
-            <pre>Replace `imod` with `operator.imod` and add try-except blocks around `cur.execute(trun)` and `cur.execute(insr)` calls</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG processes UAR data by loading tables and enriching them with additional information. It uses Snowflake as its database.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for some tasks in case of errors</li><li>Hardcoded paths to table schemas</li><li>Improper scheduling (schedule_interval=None)</li><li>No logging or monitoring configuration</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Implement retry mechanism for PythonOperator tasks and consider using a more robust scheduler like cron or Apache Airflow&#x27;s built-in scheduler.</div>
+            
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 upload_analytic_service_tables_to_s3.py (DAG ID: analytic_service_tables_extract_dag)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> Extracts data from Snowflake tables and refreshes external tables.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for PythonOperator: `python_callable=extract_tables`</li><li>Hardcoded paths in `extract_tables` function (e.g. `path=f`s3://tperson-bucket/tperson-bucket/airflow_replica/{t}/part_{part}.parquet)</li><li>Lack of logging or error handling in `extract_tables` function</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to PythonOperator, use environment variables for hardcoded paths, and add logging or error handling to `extract_tables` function.</div>
-            <pre>python_callable=extract_tables with retry_delay and max_retries parameters; use AWS config file for hardcoded paths; add logging statements in extract_tables function</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG extracts data from PostgreSQL and loads it into S3, then refreshes external tables in Snowflake.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>Missing retries for PythonOperator tasks</li><li>Hardcoded path to S3 bucket</li><li>Inconsistent use of quotes in SnowflakeHook connection string</li><li>Missing docstrings for DAG and operator functions</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add retries to PythonOperator tasks, use environment variables for hardcoded paths, update SnowflakeHook connection string to be more consistent, and add docstrings to DAG and operator functions.</div>
+            
         </div>
         <div class='dag risk-MEDIUM'>
             <h2>📄 upload_pg_tables_to_s3_v2.py (DAG ID: upload_pg_tables_to_s3_v2)</h2>
-            <div class='summary'><strong>🧠 Summary:</strong> This DAG loads PostgreSQL tables into S3 Parquet files with retries, schedules every 45 minutes.</div>
-            <div class='problems'><strong>Identified Problems:</strong><ul><li>The DAG uses a fixed chunk size of 500000 rows, which might not be optimal for all tables. Consider using a more adaptive chunk size based on the table&#x27;s row count.</li><li>The `refresh_ext_tables` function uses hardcoded Snowflake connection details. Consider using Airflow&#x27;s built-in hook to connect to Snowflake instead.</li><li>The DAG does not handle database errors properly. It catches SQLAlchemyError but does not re-raise it or retry the operation. Consider adding retries or handling exceptions more robustly.</li></ul></div>
-            <div class='suggestion'><strong>💡 Suggestion:</strong> Optimize chunk size, use Airflow&#x27;s built-in Snowflake hook, and improve error handling.</div>
-            <pre>Replace `chunkSize=500000` with `chunkSize = min(1000000, table.shape[0])` to adapt the chunk size based on the table&#x27;s row count.</pre>
+            <div class='summary'><strong>🧠 Summary:</strong> This DAG is responsible for loading PostgreSQL tables to S3, refreshing external Snowflake tables, and triggering another DAG.</div>
+            <div class='problems'><strong>Identified Problems:</strong><ul><li>No docstrings are provided for the PythonOperator tasks, which makes it difficult to understand the purpose of each task without reviewing the code.</li><li>The `retries` parameter in the default_args is set to 5, but there&#x27;s no check to ensure that the number of retries doesn&#x27;t exceed a certain threshold. This could lead to an infinite loop if the DAG fails repeatedly.</li><li>The `schedule_interval` is set to &#x27;45 0 * * *&#x27;, which might not be the most efficient schedule. It would be better to use a more specific schedule or consider using a more advanced scheduling strategy like Airflow&#x27;s built-in cron expression support.</li><li>The `catchup=False` parameter means that this DAG won&#x27;t catch up with any missing runs. This could lead to data inconsistencies if there are gaps in the run history.</li><li>There&#x27;s no validation of the `tables` dictionary before passing it to the `refresh_ext_tables` function. This could lead to errors if the dictionary is not in the expected format.</li></ul></div>
+            <div class='suggestion'><strong>💡 Suggestion:</strong> Add docstrings to all PythonOperator tasks, implement retry limits, and consider using a more specific schedule or advanced scheduling strategy.</div>
+            
         </div></body></html>
