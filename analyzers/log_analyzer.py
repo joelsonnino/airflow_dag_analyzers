@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """
-# DAG Log Analyzer AI Agent - CloudWatch version
 # This script analyzes Airflow DAG logs from AWS CloudWatch,
 # leveraging a Llama 3.2 model (via Ollama) to identify errors and suggest fixes.
 # It outputs structured JSON for programmatic consumption and a visual HTML report.
