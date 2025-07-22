@@ -1,7 +1,3 @@
-This is a comprehensive documentation for the Airflow DAG Intelligence Dashboard, designed for a technical audience and adopting a professional, senior data scientist's perspective.
-
----
-
 # 🔬 Airflow DAG Intelligence Dashboard - Comprehensive Documentation
 
 ## Table of Contents
