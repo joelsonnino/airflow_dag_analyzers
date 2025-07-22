@@ -16,9 +16,6 @@ DEFAULT_S3_DAGS_DIR = "s3://buff-analytics-dags/dags/"
 
 class OllamaClient:
     """
-    # OllamaClient
-    # Facilitates interaction with a local or network-accessible Ollama instance for LLM inference.
-    # Abstracts API calls and handles environment-based host detection (e.g., Docker).
     # Essential for integrating LLM capabilities into automated code review.
     """
     def __init__(self, model: str = "llama3.2", host: Optional[str] = None):
@@ -103,8 +100,6 @@ def save_results_as_json(results: List[Dict], output_file: str):
 def generate_html(results: List[dict], output_path: str):
     """
     # Generates a human-readable HTML report from audit results.
-    # Includes basic styling for readability and visual risk level cues.
-    # Critical for easy consumption by stakeholders without coding knowledge.
     """
     html_content = """<html><head><title>AI DAG Code Audit</title>
     <style>
@@ -163,9 +158,7 @@ def generate_html(results: List[dict], output_path: str):
 
 def main():
     """
-    # Main script entry point.
     # Parses arguments, orchestrates file scanning, AI analysis, and report generation.
-    # Designed for flexible execution in development or CI/CD pipelines.
     """
     parser = argparse.ArgumentParser(description="AI DAG Code Audit using Llama 3.2")
     parser.add_argument("--dags-dir", type=str, default=DEFAULT_S3_DAGS_DIR, help="S3 path containing DAG Python files (e.g. s3://bucket/prefix)")
